@@ -1,0 +1,10 @@
+*.class
+bin
+lib
+*.log
+*.*~
+.settings
+.DS_Store
+*.swp
+*.swo
+dist

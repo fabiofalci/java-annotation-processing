@@ -1,0 +1,43 @@
+<project name="java-annotation-processing" default="run" basedir=".">
+
+	<target name="init">
+		<delete>
+			<fileset dir="bin" includes="**/*.*" />
+		</delete>
+	</target>
+
+	<target name="run">
+		<antcall target="init" />
+		<antcall target="build-processor" />
+		<antcall target="dist-processor" />
+		<antcall target="build" />
+		<antcall target="exec" />
+	</target>
+
+	<target name="dist-processor">
+		<mkdir dir="dist" />
+		<delete file="dist/processor.jar" failonerror="false" />
+		<jar destfile="dist/processor.jar">
+			<fileset dir="bin" includes="processor/*.class" />
+		</jar>
+	</target>
+
+	<target name="build-processor">
+		<javac srcdir="processor/src" destdir="bin"/>
+	</target>
+
+	<target name="build">
+		<javac srcdir="src" destdir="bin">
+			<compilerarg line="-processor processor.TestAnnotationProcessor" />
+		</javac>
+	</target>
+
+	<target name="exec">
+		<java classname="app.AnnotatedJavaFile">
+			<classpath>
+				<pathelement location="dist/processor.jar" />
+				<pathelement path="bin" />
+			</classpath>
+		</java>
+	</target>
+</project>
